@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
-
 const userModel = require("../models/userModel");
+const jwt = require ("jsonwebtoken");
+const secret = process.env.JWT_SECRET;
+const encodedSecret = Buffer.from(secret).toString("base64");
+
+
 exports.authenticateUser = (req, res) => {
   const {email,password} = req.body;
   userModel
@@ -15,7 +19,16 @@ exports.authenticateUser = (req, res) => {
             res.status(500).json({error:err.message})
         }
         else if(result){
-           
+              const payload ={
+                userId: user._id,
+                email: user.email,
+                role: user.role
+              }      
+              const token = jwt.sign(
+                payload, 
+                encodedSecret,
+                {expiresIn:"1h"}
+            )
             res.status(200).json({message:"authentication was successful"}) // funciona 
         }
         else{

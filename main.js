@@ -1,4 +1,5 @@
 const express = require("express"); //libreria...
+const cors = require("cors");
 
 
 const app = express(); //todos los metodos de la libreria se asignan aca
@@ -11,6 +12,11 @@ const port = 3000;
 // constante userRoutes--- se crea
 const userRoutes = require("./routes/userRoutes");
 
+app.use(cors(
+    {
+        origin: "*"
+    }
+))
 
 app.use(express.json());
 
